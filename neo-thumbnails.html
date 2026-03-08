@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NEO THUMBNAILS — Creative Agency</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#06060a;--bg2:#0b0b10;--bg3:#0f0f16;--surface:#13131c;--surface2:#1a1a26;--border:rgba(255,255,255,0.07);--accent:#e8ff00;--text:#efefef;--muted:#6e6e85;--muted2:#9999b0;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;min-height:100vh;}
+.cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .25s,height .25s;}
+.cur-ring{position:fixed;width:38px;height:38px;border:1.5px solid rgba(232,255,0,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.3;}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:20px 56px;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;}
+nav.solid{background:rgba(6,6,10,.94);backdrop-filter:blur(20px);border-bottom-color:var(--border);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--text);cursor:none;user-select:none;}
+.logo span{color:var(--accent);}
+.nav-links{display:flex;gap:36px;list-style:none;}
+.nav-links a{font-size:12px;font-weight:500;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted2);text-decoration:none;transition:color .25s;cursor:none;position:relative;padding-bottom:2px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--accent);transition:width .3s;}
+.nav-links a:hover,.nav-links a.act{color:var(--accent);}
+.nav-links a:hover::after,.nav-links a.act::after{width:100%;}
+.nav-cta{background:var(--accent);color:#000;padding:10px 24px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:background .2s,transform .2s;}
+.nav-cta:hover{background:#fff;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px;}
+.hamburger span{width:24px;height:1.5px;background:var(--text);transition:all .3s;}
+/* PAGES */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+.pw{animation:pf .5s ease both;}
+@keyframes pf{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 80px;position:relative;overflow:hidden;}
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 65% 25%,rgba(232,255,0,.055) 0%,transparent 60%),radial-gradient(ellipse 45% 45% at 15% 65%,rgba(0,212,255,.04) 0%,transparent 55%);animation:bgS 10s ease-in-out infinite alternate;}
+@keyframes bgS{0%{opacity:.7;}100%{opacity:1;}}
+.hgrid{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);background-size:72px 72px;}
+.hey{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:12px;margin-bottom:24px;opacity:0;animation:ru .8s .2s forwards;}
+.hey::before{content:'';width:36px;height:1px;background:var(--accent);}
+h1.ht{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9.5vw,152px);line-height:.91;letter-spacing:2px;opacity:0;animation:ru .9s .35s forwards;}
+.ht .hl{color:var(--accent);}
+.ht .hw{-webkit-text-stroke:1.5px rgba(255,255,255,.22);color:transparent;}
+.hsub{font-size:clamp(14px,1.6vw,18px);color:var(--muted2);margin-top:28px;max-width:460px;line-height:1.7;font-weight:300;opacity:0;animation:ru .9s .5s forwards;}
+.hsub em{font-style:normal;color:var(--text);font-weight:500;}
+.hbtns{margin-top:44px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;opacity:0;animation:ru .9s .65s forwards;}
+.btn-y{background:var(--accent);color:#000;padding:14px 36px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:transform .25s,box-shadow .25s;display:inline-block;}
+.btn-y:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(232,255,0,.22);}
+.btn-g{color:var(--muted2);font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:none;display:flex;align-items:center;gap:8px;transition:color .25s;}
+.btn-g:hover{color:var(--accent);}
+.btn-g svg{transition:transform .25s;}
+.btn-g:hover svg{transform:translateX(4px);}
+.hstats{position:absolute;right:56px;bottom:80px;display:flex;flex-direction:column;gap:28px;text-align:right;opacity:0;animation:ru .9s .8s forwards;}
+.hsn{font-family:'Bebas Neue',sans-serif;font-size:46px;line-height:1;letter-spacing:2px;}
+.hsn span{color:var(--accent);}
+.hsl{font-size:10px;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;margin-top:2px;}
+.shi{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:ru 1s 1.1s forwards;}
+.shi span{font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);}
+.sline{width:1px;height:54px;background:linear-gradient(to bottom,var(--accent),transparent);animation:sp 2s ease-in-out infinite;}
+@keyframes sp{0%,100%{opacity:.3;transform:scaleY(.5);transform-origin:top;}50%{opacity:1;transform:scaleY(1);}}
+@keyframes ru{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+/* MARQUEE */
+.mq{padding:16px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden;}
+.mqt{display:flex;width:max-content;animation:mqs 22s linear infinite;}
+.mqt:hover{animation-play-state:paused;}
+.mqi{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:var(--muted);padding:0 36px;white-space:nowrap;display:flex;align-items:center;gap:36px;}
+.mqd{color:var(--accent);font-size:24px;}
+@keyframes mqs{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+/* SECTIONS */
+.sec{padding:110px 56px;}
+.stag{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.stag::before{content:'';width:28px;height:1px;background:var(--accent);}
+.stitle{font-family:'Bebas Neue',sans-serif;font-size:clamp(40px,5.5vw,80px);line-height:.95;letter-spacing:2px;}
+.stitle .hw{-webkit-text-stroke:1.5px rgba(255,255,255,.18);color:transparent;}
+/* SERVICE CARDS */
+.sg{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;margin-top:60px;}
+.sc{background:var(--surface);padding:48px 44px;position:relative;overflow:hidden;cursor:none;transition:background .35s;border-bottom:2px solid transparent;}
+.sc:hover{background:var(--surface2);border-bottom-color:var(--accent);}
+.scn{font-family:'Bebas Neue',sans-serif;font-size:68px;color:rgba(255,255,255,.035);line-height:1;position:absolute;top:16px;right:24px;transition:color .4s;}
+.sc:hover .scn{color:rgba(232,255,0,.07);}
+.sci{width:50px;height:50px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:24px;transition:border-color .3s,background .3s;}
+.sc:hover .sci{border-color:var(--accent);background:rgba(232,255,0,.07);}
+.sci svg{width:22px;height:22px;color:var(--muted2);transition:color .3s;}
+.sc:hover .sci svg{color:var(--accent);}
+.scname{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:12px;}
+.scdesc{font-size:14px;color:var(--muted2);line-height:1.75;max-width:360px;}
+.sclink{margin-top:26px;display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;cursor:none;transition:color .3s;}
+.sc:hover .sclink{color:var(--accent);}
+/* ABOUT STRIP */
+.abs{background:var(--bg2);padding:100px 56px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.avis{position:relative;aspect-ratio:4/5;}
+.avf{width:100%;height:100%;background:var(--surface);border:1px solid var(--border);overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.avlb{font-family:'Bebas Neue',sans-serif;font-size:90px;letter-spacing:8px;color:rgba(232,255,0,.1);text-align:center;line-height:.85;}
+.avbadge{position:absolute;bottom:-18px;right:-18px;width:110px;height:110px;background:var(--accent);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.avbadge .bn{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#000;line-height:1;}
+.avbadge .bl{font-size:9px;color:rgba(0,0,0,.7);letter-spacing:1.5px;text-transform:uppercase;}
+.atxt p{font-size:16px;color:var(--muted2);line-height:1.8;font-weight:300;margin-bottom:16px;}
+.atxt p strong{color:var(--text);font-weight:500;}
+.pills{display:flex;flex-direction:column;gap:12px;margin:28px 0 36px;}
+.pill{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--border);transition:border-color .3s,background .3s;}
+.pill:hover{border-color:rgba(232,255,0,.2);background:rgba(232,255,0,.03);}
+.pd{width:7px;height:7px;background:var(--accent);flex-shrink:0;}
+.pt{font-size:13px;color:var(--text);font-weight:500;}
+/* PORTFOLIO */
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:56px;}
+.pi{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--surface);cursor:none;}
+.pi.wide{grid-column:span 2;}
+.po{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,6,10,.92) 0%,transparent 55%);opacity:0;transition:opacity .35s;display:flex;align-items:flex-end;padding:22px;}
+.pi:hover .po{opacity:1;}
+.ptag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);display:block;margin-bottom:5px;}
+.ptitle{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+.ft{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:transform .6s ease;}
+.pi:hover .ft{transform:scale(1.06);}
+.ft span{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,.3);text-align:center;padding:20px;position:relative;z-index:1;}
+.fg{position:absolute;width:100px;height:100px;border-radius:50%;filter:blur(35px);opacity:.55;}
+.ft1{background:linear-gradient(135deg,#0d0d20,#0d1a3d);}.ft1 .fg{background:#1a4aff;top:25%;left:35%;}
+.ft2{background:linear-gradient(135deg,#1a0808,#3d0808);}.ft2 .fg{background:#ff2000;top:30%;left:40%;}
+.ft3{background:linear-gradient(135deg,#0a1208,#0d2800);}.ft3 .fg{background:#00cc44;top:20%;left:30%;}
+.ft4{background:linear-gradient(135deg,#14100a,#2e1e00);}.ft4 .fg{background:#ffaa00;top:25%;left:35%;}
+.ft5{background:linear-gradient(135deg,#12081a,#28005c);}.ft5 .fg{background:#8800ff;top:30%;left:40%;}
+.ft6{background:linear-gradient(135deg,#060e1a,#002040);}.ft6 .fg{background:#00ccff;top:25%;left:35%;}
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px;}
+.tc{background:var(--surface);padding:38px 34px;border:1px solid var(--border);position:relative;transition:border-color .3s;}
+.tc:hover{border-color:rgba(232,255,0,.18);}
+.tq{font-family:'Bebas Neue',sans-serif;font-size:76px;color:rgba(232,255,0,.09);line-height:.7;position:absolute;top:20px;right:24px;}
+.stars{display:flex;gap:3px;margin-bottom:16px;}
+.star{color:var(--accent);font-size:13px;}
+.tt{font-size:14px;line-height:1.78;color:var(--muted2);font-style:italic;margin-bottom:24px;position:relative;z-index:1;}
+.tt em{font-style:normal;color:var(--text);}
+.ta{display:flex;align-items:center;gap:12px;}
+.tav{width:42px;height:42px;background:var(--surface2);border-radius:50%;border:1px solid rgba(232,255,0,.2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--accent);}
+.tn{font-size:13px;font-weight:600;color:var(--text);}
+.tr{font-size:11px;color:var(--muted);}
+/* CTA BAND */
+.ctab{background:var(--accent);padding:72px 56px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+.ctab h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,4vw,62px);color:#000;letter-spacing:2px;line-height:.95;max-width:560px;}
+.ctab h2 em{font-style:normal;-webkit-text-stroke:1.5px rgba(0,0,0,.5);color:transparent;}
+.btn-d{background:#000;color:var(--accent);padding:16px 38px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:background .25s,transform .25s;white-space:nowrap;}
+.btn-d:hover{background:#111;transform:translateY(-2px);}
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid var(--border);padding:56px 56px 32px;}
+.ft-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:48px;}
+.flogo{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:3px;cursor:none;}
+.flogo span{color:var(--accent);}
+.ftag{font-size:12px;color:var(--muted);margin-top:8px;max-width:260px;line-height:1.6;}
+.fcols{display:flex;gap:72px;}
+.fct{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:18px;font-weight:600;}
+.fcl{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.fcl a{font-size:12px;color:var(--muted2);text-decoration:none;cursor:none;transition:color .25s;}
+.fcl a:hover{color:var(--text);}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;padding-top:22px;border-top:1px solid var(--border);}
+.fcopy{font-size:11px;color:var(--muted);}
+.fcopy span{color:var(--accent);}
+.socs{display:flex;gap:10px;}
+.soc{width:34px;height:34px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:none;transition:border-color .3s,background .3s;}
+.soc:hover{border-color:var(--accent);background:rgba(232,255,0,.08);}
+.soc svg{width:13px;height:13px;color:var(--muted2);transition:color .3s;}
+.soc:hover svg{color:var(--accent);}
+/* SERVICE PAGE HERO */
+.sph{min-height:55vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 64px;position:relative;overflow:hidden;border-bottom:1px solid var(--border);}
+.sph::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 30%,var(--hc,rgba(232,255,0,.06)) 0%,transparent 65%);}
+.sph .gbg{position:absolute;inset:0;opacity:.03;background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);background-size:60px 60px;}
+.spey{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:10px;margin-bottom:20px;position:relative;z-index:1;}
+.spey::before{content:'';width:28px;height:1px;background:var(--accent);}
+.spt{font-family:'Bebas Neue',sans-serif;font-size:clamp(50px,7vw,110px);line-height:.9;letter-spacing:2px;position:relative;z-index:1;}
+.spt .hw{-webkit-text-stroke:1.5px rgba(255,255,255,.2);color:transparent;}
+.spsub{font-size:clamp(14px,1.5vw,17px);color:var(--muted2);margin-top:22px;max-width:500px;line-height:1.7;font-weight:300;position:relative;z-index:1;}
+/* FEAT GRID */
+.fg3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+.fc{background:var(--surface);padding:38px 34px;position:relative;overflow:hidden;transition:background .35s;}
+.fc:hover{background:var(--surface2);}
+.fc::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--accent);transition:width .5s ease;}
+.fc:hover::after{width:100%;}
+.fci{width:46px;height:46px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:border-color .3s,background .3s;}
+.fc:hover .fci{border-color:var(--accent);background:rgba(232,255,0,.07);}
+.fci svg{width:20px;height:20px;color:var(--muted2);transition:color .3s;}
+.fc:hover .fci svg{color:var(--accent);}
+.fcn{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.fcd{font-size:13px;color:var(--muted2);line-height:1.72;}
+/* PRICING */
+.pg3{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px;}
+.pc{background:var(--surface);padding:44px 38px;border:1px solid var(--border);position:relative;transition:border-color .35s;}
+.pc.feat{border-color:var(--accent);background:var(--surface2);}
+.pc:hover{border-color:rgba(232,255,0,.3);}
+.pbadge{position:absolute;top:-1px;right:28px;background:var(--accent);color:#000;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;}
+.ptier{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.pname{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);margin-bottom:20px;}
+.pamt{font-family:'Bebas Neue',sans-serif;font-size:56px;line-height:1;letter-spacing:2px;color:var(--text);margin-bottom:4px;}
+.pamt span{font-size:24px;color:var(--accent);}
+.pper{font-size:12px;color:var(--muted);margin-bottom:28px;}
+.pf{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px;}
+.pf li{font-size:13px;color:var(--muted2);display:flex;align-items:center;gap:10px;}
+.pf li::before{content:'✓';color:var(--accent);font-weight:700;font-size:12px;flex-shrink:0;}
+.pcta{display:block;text-align:center;padding:13px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:none;transition:background .25s,color .25s;border:1px solid var(--accent);color:var(--accent);}
+.pc.feat .pcta{background:var(--accent);color:#000;}
+.pcta:hover{background:var(--accent);color:#000;}
+/* PROCESS */
+.procg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);margin-top:56px;}
+.procs{padding:44px 32px;border-right:1px solid var(--border);position:relative;transition:background .35s;}
+.procs:last-child{border-right:none;}
+.procs:hover{background:rgba(232,255,0,.025);}
+.procn{font-family:'Bebas Neue',sans-serif;font-size:72px;color:rgba(255,255,255,.035);line-height:1;position:absolute;top:12px;right:16px;transition:color .4s;}
+.procs:hover .procn{color:rgba(232,255,0,.06);}
+.proci{width:44px;height:44px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:border-color .3s;}
+.procs:hover .proci{border-color:var(--accent);}
+.proci svg{width:18px;height:18px;color:var(--muted2);transition:color .3s;}
+.procs:hover .proci svg{color:var(--accent);}
+.proct{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.procd{font-size:12px;color:var(--muted2);line-height:1.72;}
+/* CONTACT */
+.cw{display:grid;grid-template-columns:1fr 1fr;gap:72px;margin-top:56px;}
+.cinfo p{font-size:16px;color:var(--muted2);line-height:1.8;margin-bottom:36px;font-weight:300;}
+.cms{display:flex;flex-direction:column;gap:16px;}
+.cm{display:flex;align-items:center;gap:16px;padding:18px 22px;border:1px solid var(--border);transition:border-color .3s,background .3s;}
+.cm:hover{border-color:rgba(232,255,0,.25);background:rgba(232,255,0,.025);}
+.cmico{width:40px;height:40px;background:rgba(232,255,0,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cmico svg{width:17px;height:17px;color:var(--accent);}
+.cmlbl{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.cmval{font-size:14px;color:var(--text);font-weight:500;margin-top:2px;}
+.cform{display:flex;flex-direction:column;gap:14px;}
+.crow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ig{display:flex;flex-direction:column;gap:7px;}
+.ig label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.ig input,.ig textarea,.ig select{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:13px 16px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .3s;appearance:none;}
+.ig input:focus,.ig textarea:focus,.ig select:focus{border-color:rgba(232,255,0,.35);}
+.ig textarea{resize:none;height:110px;}
+.ig select option{background:var(--surface2);}
+.csub{background:var(--accent);color:#000;padding:16px 0;font-size:12px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;cursor:none;width:100%;margin-top:6px;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:transform .25s,box-shadow .25s;}
+.csub:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(232,255,0,.18);}
+/* MOBILE MENU */
+.mmenu{position:fixed;inset:0;background:rgba(6,6,10,.98);z-index:450;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;opacity:0;pointer-events:none;transition:opacity .35s;}
+.mmenu.open{opacity:1;pointer-events:all;}
+.mmenu a{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;color:var(--muted2);text-decoration:none;cursor:none;transition:color .25s;}
+.mmenu a:hover{color:var(--accent);}
+.mclose{position:absolute;top:24px;right:24px;background:none;border:none;cursor:none;color:var(--muted2);font-size:28px;}
+/* REVEAL */
+.rv{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease;}
+.rv.vis{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}.d4{transition-delay:.4s;}
+/* MINI FOOTER */
+.mfoot{padding:24px 56px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.mfoot .fcopy{font-size:11px;color:var(--muted);}
+.mfoot .fcopy span{color:var(--accent);}
+.back-link{font-size:12px;color:var(--muted);text-decoration:none;cursor:none;transition:color .25s;}
+.back-link:hover{color:var(--accent);}
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:16px 20px;}.nav-links{display:none;}.hamburger{display:flex;}
+  .hero{padding:0 20px 70px;}.hstats{display:none;}
+  .sec{padding:70px 20px;}.sg{grid-template-columns:1fr;}
+  .fg3{grid-template-columns:1fr 1fr;}.pg3{grid-template-columns:1fr;}
+  .procg{grid-template-columns:1fr 1fr;}.procs{border-right:none;border-bottom:1px solid var(--border);}
+  .pg{grid-template-columns:1fr 1fr;}.pi.wide{grid-column:span 2;}
+  .tg{grid-template-columns:1fr;}.abs{grid-template-columns:1fr;gap:48px;padding:70px 20px;}
+  .cw{grid-template-columns:1fr;gap:48px;}.crow{grid-template-columns:1fr;}
+  .ft-top{flex-direction:column;gap:36px;}.fcols{gap:32px;flex-wrap:wrap;}
+  .ctab{flex-direction:column;text-align:center;padding:56px 20px;}
+  .sph{padding:0 20px 56px;}.mfoot{padding:24px 20px;}
+  footer{padding:40px 20px 24px;}
+}
+</style>
+</head>
+<body>
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="crng"></div>
+
+<nav id="nav">
+  <div class="logo" onclick="goTo('home')">NEO<span>.</span></div>
+  <ul class="nav-links" id="nl">
+    <li><a href="#" onclick="goTo('home');return false;" data-p="home">Home</a></li>
+    <li><a href="#" onclick="goTo('thumb');return false;" data-p="thumb">Thumbnails</a></li>
+    <li><a href="#" onclick="goTo('video');return false;" data-p="video">Video Editing</a></li>
+    <li><a href="#" onclick="goTo('web');return false;" data-p="web">Web Dev</a></li>
+    <li><a href="#" onclick="goTo('mkt');return false;" data-p="mkt">Marketing</a></li>
+    <li><a href="#" onclick="goTo('contact');return false;" data-p="contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="goTo('contact');return false;">Start Project</a>
+  <div class="hamburger" id="ham" onclick="openM()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mmenu" id="mm">
+  <button class="mclose" onclick="closeM()">✕</button>
+  <a href="#" onclick="goTo('home');closeM();return false;">Home</a>
+  <a href="#" onclick="goTo('thumb');closeM();return false;">Thumbnails</a>
+  <a href="#" onclick="goTo('video');closeM();return false;">Video Editing</a>
+  <a href="#" onclick="goTo('web');closeM();return false;">Web Dev</a>
+  <a href="#" onclick="goTo('mkt');closeM();return false;">Marketing</a>
+  <a href="#" onclick="goTo('contact');closeM();return false;">Contact</a>
+</div>
+
+<!-- HOME -->
+<div class="page active" id="pg-home"><div class="pw">
+<section class="hero">
+  <div class="hbg"></div><div class="hgrid"></div>
+  <div class="hey">Creative Agency · Est. 2021 · India</div>
+  <h1 class="ht"><span class="hw">IF THEY</span><br><span class="hl">NEVER</span> CLICK,<br><span class="hw">THEY'LL</span><br>NEVER WATCH.</h1>
+  <p class="hsub">We craft <em>click-obsessed visuals</em> — thumbnails, video edits, websites and campaigns that stop the scroll and grow your audience.</p>
+  <div class="hbtns">
+    <a href="#" class="btn-y" onclick="scrollSvc();return false;">Explore Services</a>
+    <a href="#" class="btn-g" onclick="goTo('contact');return false;">Start a Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+  <div class="hstats">
+    <div><div class="hsn">500<span>+</span></div><div class="hsl">Thumbnails Made</div></div>
+    <div><div class="hsn">98<span>%</span></div><div class="hsl">Satisfaction</div></div>
+    <div><div class="hsn">3M<span>+</span></div><div class="hsl">Views Generated</div></div>
+  </div>
+  <div class="shi"><span>Scroll</span><div class="sline"></div></div>
+</section>
+<div class="mq"><div class="mqt"><div class="mqi">Thumbnail Design <span class="mqd">·</span> Video Editing <span class="mqd">·</span> Web Development <span class="mqd">·</span> Digital Marketing <span class="mqd">·</span> Brand Strategy <span class="mqd">·</span> Content Growth <span class="mqd">·</span></div><div class="mqi">Thumbnail Design <span class="mqd">·</span> Video Editing <span class="mqd">·</span> Web Development <span class="mqd">·</span> Digital Marketing <span class="mqd">·</span> Brand Strategy <span class="mqd">·</span> Content Growth <span class="mqd">·</span></div><div class="mqi">Thumbnail Design <span class="mqd">·</span> Video Editing <span class="mqd">·</span> Web Development <span class="mqd">·</span> Digital Marketing <span class="mqd">·</span> Brand Strategy <span class="mqd">·</span> Content Growth <span class="mqd">·</span></div></div></div>
+<section class="sec" id="svc-a">
+  <div class="stag rv">What We Do</div>
+  <h2 class="stitle rv d1">OUR <span class="hw">CORE</span><br>SERVICES</h2>
+  <div class="sg">
+    <div class="sc rv d1"><span class="scn">01</span><div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="12" rx="1"/><path d="M3 9h18"/></svg></div><div class="scname">Thumbnail Design</div><p class="scdesc">Data-driven thumbnails built to maximize CTR. We combine visual psychology, face expressions, and bold typography to create thumbnails that demand attention.</p><a href="#" class="sclink" onclick="goTo('thumb');return false;">Explore Service →</a></div>
+    <div class="sc rv d2"><span class="scn">02</span><div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg></div><div class="scname">Video Editing</div><p class="scdesc">Cinematic cuts, motion graphics, colour grading and storytelling pacing. We turn raw footage into content that keeps viewers watching until the final second.</p><a href="#" class="sclink" onclick="goTo('video');return false;">Explore Service →</a></div>
+    <div class="sc rv d3"><span class="scn">03</span><div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><div class="scname">Web Development</div><p class="scdesc">High-performance websites and landing pages built to convert. Creator portfolios, agency sites, brand platforms — digital experiences that drive real results.</p><a href="#" class="sclink" onclick="goTo('web');return false;">Explore Service →</a></div>
+    <div class="sc rv d4"><span class="scn">04</span><div class="sci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"/><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"/></svg></div><div class="scname">Digital Marketing</div><p class="scdesc">SEO strategy, social media growth, audience targeting and content systems — we put your brand in front of the people who will click, watch, and stay.</p><a href="#" class="sclink" onclick="goTo('mkt');return false;">Explore Service →</a></div>
+  </div>
+</section>
+<div class="abs">
+  <div class="avis rv"><div class="avf"><div class="avlb">NEO<br>THUMB<br>NAILS</div></div><div class="avbadge"><div class="bn">500</div><div class="bl">Projects</div></div></div>
+  <div class="atxt rv d2">
+    <div class="stag">About the Agency</div>
+    <h2 class="stitle">WE ARE<br><span class="hw">NEO.</span></h2>
+    <p style="margin-top:20px;"><strong>NEO Thumbnails</strong> is a full-service creative agency for digital creators and brands. We started with one mission: <strong>make every click count.</strong></p>
+    <p>In the attention economy, your thumbnail is your storefront. We blend visual psychology, platform analytics, and raw creative talent to build assets that <strong>perform.</strong></p>
+    <div class="pills">
+      <div class="pill"><div class="pd"></div><div class="pt">Performance-first — every decision is data-backed</div></div>
+      <div class="pill"><div class="pd"></div><div class="pt">48-hour delivery on all thumbnail projects</div></div>
+      <div class="pill"><div class="pd"></div><div class="pt">Unlimited revisions until 100% satisfied</div></div>
+      <div class="pill"><div class="pd"></div><div class="pt">Dedicated creative director per client</div></div>
+    </div>
+    <a href="#" class="btn-y" onclick="goTo('contact');return false;">Work With Us</a>
+  </div>
+</div>
+<section class="sec" style="background:var(--bg);">
+  <div class="stag rv">Our Work</div>
+  <h2 class="stitle rv d1">THE WORK <span class="hw">SPEAKS</span></h2>
+  <div class="pg">
+    <div class="pi wide rv d1"><div class="ft ft1"><div class="fg"></div><span>GAMING CHANNEL<br>VIRAL THUMBNAIL</span></div><div class="po"><div><span class="ptag">Thumbnail Design</span><div class="ptitle">Gaming Channel — 2.4M Views</div></div></div></div>
+    <div class="pi rv d2"><div class="ft ft2"><div class="fg"></div><span>TECH REVIEW<br>THUMBNAIL</span></div><div class="po"><div><span class="ptag">Thumbnail</span><div class="ptitle">Tech Review — CTR +38%</div></div></div></div>
+    <div class="pi rv d2"><div class="ft ft3"><div class="fg"></div><span>FITNESS BRAND<br>WEB DESIGN</span></div><div class="po"><div><span class="ptag">Web Dev</span><div class="ptitle">Fitness Brand Site</div></div></div></div>
+    <div class="pi rv d3"><div class="ft ft4"><div class="fg"></div><span>FINANCE CHANNEL<br>THUMBNAIL</span></div><div class="po"><div><span class="ptag">Thumbnail</span><div class="ptitle">Finance — 1.1M Views</div></div></div></div>
+    <div class="pi rv d3"><div class="ft ft5"><div class="fg"></div><span>PODCAST<br>VIDEO EDIT</span></div><div class="po"><div><span class="ptag">Video Editing</span><div class="ptitle">Podcast Series</div></div></div></div>
+    <div class="pi rv d4"><div class="ft ft6"><div class="fg"></div><span>LIFESTYLE CREATOR<br>THUMBNAIL</span></div><div class="po"><div><span class="ptag">Thumbnail</span><div class="ptitle">Lifestyle — +52% CTR</div></div></div></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg2);">
+  <div class="stag rv">Client Love</div>
+  <h2 class="stitle rv d1">WHAT CLIENTS <span class="hw">SAY</span></h2>
+  <div class="tg">
+    <div class="tc rv d1"><div class="tq">"</div><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><p class="tt">NEO transformed our channel. After switching, our <em>CTR went from 3.2% to 8.7%</em> in six weeks. Views literally doubled.</p><div class="ta"><div class="tav">AK</div><div><div class="tn">Arjun Kapoor</div><div class="tr">Tech YouTuber — 580K Subs</div></div></div></div>
+    <div class="tc rv d2"><div class="tq">"</div><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><p class="tt">Nobody understands <em>the YouTube algorithm like NEO does.</em> It shows in every single thumbnail they create.</p><div class="ta"><div class="tav">SM</div><div><div class="tn">Sarah Mitchell</div><div class="tr">Lifestyle Creator — 1.2M Subs</div></div></div></div>
+    <div class="tc rv d3"><div class="tq">"</div><div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div><p class="tt">Our finance channel <em>hit 100K in 3 months</em> with NEO handling our visuals. Incredibly professional and fast.</p><div class="ta"><div class="tav">RV</div><div><div class="tn">Rahul Verma</div><div class="tr">Finance Creator — 220K Subs</div></div></div></div>
+  </div>
+</section>
+<div class="ctab rv"><h2>READY TO<br><em>DOMINATE</em><br>YOUR NICHE?</h2><a href="#" class="btn-d" onclick="goTo('contact');return false;">Start Your Project Today</a></div>
+<footer>
+  <div class="ft-top">
+    <div><div class="flogo">NEO<span>.</span></div><p class="ftag">If they will never click, they'll never watch it. We make them click.</p></div>
+    <div class="fcols">
+      <div><div class="fct">Services</div><ul class="fcl"><li><a href="#" onclick="goTo('thumb');return false;">Thumbnail Design</a></li><li><a href="#" onclick="goTo('video');return false;">Video Editing</a></li><li><a href="#" onclick="goTo('web');return false;">Web Development</a></li><li><a href="#" onclick="goTo('mkt');return false;">Digital Marketing</a></li></ul></div>
+      <div><div class="fct">Company</div><ul class="fcl"><li><a href="#" onclick="goTo('home');return false;">About NEO</a></li><li><a href="#" onclick="goTo('home');return false;">Portfolio</a></li><li><a href="#" onclick="goTo('contact');return false;">Contact</a></li></ul></div>
+      <div><div class="fct">Connect</div><ul class="fcl"><li><a href="#">YouTube</a></li><li><a href="#">Instagram</a></li><li><a href="#">Twitter / X</a></li><li><a href="#">Behance</a></li></ul></div>
+    </div>
+  </div>
+  <div class="ft-bot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><div class="socs"><div class="soc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="soc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></div><div class="soc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div></div></div>
+</footer>
+</div></div>
+
+<!-- THUMBNAIL PAGE -->
+<div class="page" id="pg-thumb"><div class="pw">
+<div class="sph" style="--hc:rgba(232,255,0,.065);"><div class="gbg"></div><div class="spey">Service — 01</div><h1 class="spt">THUMBNAIL<br><span class="hw">DESIGN</span></h1><p class="spsub">We design thumbnails that compel the click. Every pixel is backed by data, visual psychology, and a deep understanding of how the YouTube algorithm rewards high-CTR content.</p></div>
+<section class="sec" style="background:var(--bg2);">
+  <div class="stag rv">What We Offer</div><h2 class="stitle rv d1">EVERYTHING YOU <span class="hw">NEED</span></h2>
+  <div class="fg3">
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div><div class="fcn">Face-Forward Designs</div><p class="fcd">Expressive facial compositions that trigger curiosity and emotion — proven to boost CTR by 20–40%.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg></div><div class="fcn">Color Psychology</div><p class="fcd">Strategic color choices based on niche, audience psychology, and competitor analysis to stand out in every feed.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6h16M4 12h10M4 18h7"/></svg></div><div class="fcn">Bold Typography</div><p class="fcd">High-impact text hierarchy and custom fonts that communicate your video's value at a single glance.</p></div>
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><div class="fcn">A/B Variations</div><p class="fcd">We deliver 2–3 concept variations so you can test and identify the highest-performing thumbnail for your video.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div class="fcn">48-Hour Delivery</div><p class="fcd">Fast turnaround without compromising quality. Most projects delivered within 24–48 hours of brief approval.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg></div><div class="fcn">Unlimited Revisions</div><p class="fcd">We iterate until you're 100% satisfied. No extra charges, no limits — we get it right every single time.</p></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg);">
+  <div class="stag rv">Pricing</div><h2 class="stitle rv d1">SIMPLE <span class="hw">PRICING</span></h2>
+  <div class="pg3">
+    <div class="pc rv d1"><div class="ptier">Starter</div><div class="pname">Basic Thumbnail</div><div class="pamt"><span>$</span>15</div><div class="pper">per thumbnail</div><ul class="pf"><li>1 Thumbnail Design</li><li>2 Revisions</li><li>48-Hour Delivery</li><li>HD File (JPG + PNG)</li><li>Basic Composition</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc feat rv d2"><div class="pbadge">Most Popular</div><div class="ptier">Professional</div><div class="pname">Pro Thumbnail</div><div class="pamt"><span>$</span>35</div><div class="pper">per thumbnail</div><ul class="pf"><li>1 Thumbnail + 2 Variations</li><li>Unlimited Revisions</li><li>24-Hour Delivery</li><li>HD + 4K Files</li><li>Advanced Composition</li><li>CTR Strategy Consultation</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc rv d3"><div class="ptier">Agency</div><div class="pname">Monthly Package</div><div class="pamt"><span>$</span>199</div><div class="pper">per month (8 thumbnails)</div><ul class="pf"><li>8 Thumbnails / Month</li><li>Priority Support</li><li>Same-Day Delivery</li><li>Dedicated Designer</li><li>Performance Tracking</li><li>Free Strategy Call</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+  </div>
+</section>
+<div class="ctab rv"><h2>YOUR NEXT VIDEO<br>DESERVES TO <em>GET CLICKED.</em></h2><a href="#" class="btn-d" onclick="goTo('contact');return false;">Order a Thumbnail</a></div>
+<div class="mfoot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><a href="#" class="back-link" onclick="goTo('home');return false;">← Back to Home</a></div>
+</div></div>
+
+<!-- VIDEO EDITING PAGE -->
+<div class="page" id="pg-video"><div class="pw">
+<div class="sph" style="--hc:rgba(0,212,255,.055);"><div class="gbg"></div><div class="spey">Service — 02</div><h1 class="spt">VIDEO<br><span class="hw">EDITING</span></h1><p class="spsub">From raw footage to cinematic masterpieces. We edit videos that hook viewers in the first 3 seconds and keep them engaged until the very last frame.</p></div>
+<section class="sec" style="background:var(--bg2);">
+  <div class="stag rv">What We Offer</div><h2 class="stitle rv d1">EDITING THAT <span class="hw">PERFORMS</span></h2>
+  <div class="fg3">
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82v6.36a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg></div><div class="fcn">Cinematic Cuts</div><p class="fcd">Professional pacing and transition work that gives your content a cinematic feel setting you apart from every competitor.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg></div><div class="fcn">Color Grading</div><p class="fcd">Expert colour correction and grading to match the mood and aesthetic of your channel or brand identity perfectly.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="fcn">Motion Graphics</div><p class="fcd">Custom animated graphics, text animations, and lower thirds that make your content look like premium production.</p></div>
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg></div><div class="fcn">Sound Design</div><p class="fcd">Professional audio mixing, music selection, SFX, and voice-over cleanup for polished, broadcast-quality sound.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="fcn">Shorts & Reels</div><p class="fcd">Optimised vertical cuts for YouTube Shorts, Instagram Reels, and TikTok — maximising your content's reach.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div class="fcn">End Screens & CTAs</div><p class="fcd">Strategically placed call-to-action sequences and end screens designed to maximise watch-time and subscriptions.</p></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg3);">
+  <div class="stag rv">Our Process</div><h2 class="stitle rv d1">HOW WE <span class="hw">WORK</span></h2>
+  <div class="procg">
+    <div class="procs rv d1"><span class="procn">01</span><div class="proci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg></div><div class="proct">Upload Footage</div><p class="procd">Share your raw files via Drive or WeTransfer. We accept any format and resolution — no extra hassle.</p></div>
+    <div class="procs rv d2"><span class="procn">02</span><div class="proci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><div class="proct">Creative Brief</div><p class="procd">We discuss your vision, reference videos, desired style, tone, and any specific requirements you have.</p></div>
+    <div class="procs rv d3"><span class="procn">03</span><div class="proci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></div><div class="proct">Edit & Grade</div><p class="procd">Our editors craft the full edit with colour grading, sound mixing, and motion graphics applied.</p></div>
+    <div class="procs rv d4"><span class="procn">04</span><div class="proci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 13l4 4L19 7"/></svg></div><div class="proct">Deliver & Revise</div><p class="procd">Final video delivered in your preferred format. Revisions included until you're completely satisfied.</p></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg);">
+  <div class="stag rv">Pricing</div><h2 class="stitle rv d1">VIDEO EDITING <span class="hw">PLANS</span></h2>
+  <div class="pg3">
+    <div class="pc rv d1"><div class="ptier">Short Form</div><div class="pname">Shorts / Reels</div><div class="pamt"><span>$</span>25</div><div class="pper">per video (under 60s)</div><ul class="pf"><li>Basic Cuts & Transitions</li><li>Captions / Subtitles</li><li>Background Music</li><li>2 Revisions</li><li>72-Hour Delivery</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Order Now</a></div>
+    <div class="pc feat rv d2"><div class="pbadge">Best Value</div><div class="ptier">Long Form</div><div class="pname">YouTube Video</div><div class="pamt"><span>$</span>80</div><div class="pper">per video (5–20 min)</div><ul class="pf"><li>Full Edit + Color Grade</li><li>Motion Graphics</li><li>Sound Design</li><li>Unlimited Revisions</li><li>End Screen Design</li><li>5-Day Delivery</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Order Now</a></div>
+    <div class="pc rv d3"><div class="ptier">Retainer</div><div class="pname">Monthly Package</div><div class="pamt"><span>$</span>299</div><div class="pper">per month (4 long-form videos)</div><ul class="pf"><li>4 Full Edits / Month</li><li>4 Shorts Cuts Included</li><li>Priority Queue</li><li>Dedicated Editor</li><li>Strategy Review</li><li>Free Thumbnail / Month</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Order Now</a></div>
+  </div>
+</section>
+<div class="ctab rv"><h2>RAW FOOTAGE TO<br><em>CINEMATIC</em> CONTENT.</h2><a href="#" class="btn-d" onclick="goTo('contact');return false;">Start a Video Project</a></div>
+<div class="mfoot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><a href="#" class="back-link" onclick="goTo('home');return false;">← Back to Home</a></div>
+</div></div>
+
+<!-- WEB DEV PAGE -->
+<div class="page" id="pg-web"><div class="pw">
+<div class="sph" style="--hc:rgba(255,60,92,.05);"><div class="gbg"></div><div class="spey">Service — 03</div><h1 class="spt">WEB<br><span class="hw">DEVELOPMENT</span></h1><p class="spsub">High-performance, visually stunning websites and landing pages. Creator portfolios, agency sites, brand platforms — digital experiences that convert visitors into loyal clients.</p></div>
+<section class="sec" style="background:var(--bg2);">
+  <div class="stag rv">What We Build</div><h2 class="stitle rv d1">DIGITAL <span class="hw">EXPERIENCES</span></h2>
+  <div class="fg3">
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg></div><div class="fcn">Creator Portfolios</div><p class="fcd">Showcase your work and attract brand deals with a professional portfolio site that reflects your creative identity.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div><div class="fcn">Agency & Brand Sites</div><p class="fcd">Full multi-page websites for agencies, businesses, and personal brands — clean, fast, and built to impress.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div class="fcn">Landing Pages</div><p class="fcd">High-converting single-page sites optimised to capture leads, sell products, or promote your services effectively.</p></div>
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="fcn">Fully Responsive</div><p class="fcd">Every site we build looks perfect and performs flawlessly on mobile, tablet, and desktop devices.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></div><div class="fcn">SEO Optimised</div><p class="fcd">Built with SEO best practices — semantic HTML, fast load times, and proper meta structure from day one.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg></div><div class="fcn">Clean Code</div><p class="fcd">All projects are built with clean, well-documented code — easy to maintain, extend, and hand off to any developer.</p></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg);">
+  <div class="stag rv">Pricing</div><h2 class="stitle rv d1">WEB DEV <span class="hw">PACKAGES</span></h2>
+  <div class="pg3">
+    <div class="pc rv d1"><div class="ptier">Starter</div><div class="pname">Landing Page</div><div class="pamt"><span>$</span>149</div><div class="pper">one-time</div><ul class="pf"><li>Single Page Design</li><li>Fully Responsive</li><li>Contact Form</li><li>Basic SEO Setup</li><li>7-Day Delivery</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc feat rv d2"><div class="pbadge">Most Popular</div><div class="ptier">Professional</div><div class="pname">Multi-Page Website</div><div class="pamt"><span>$</span>399</div><div class="pper">one-time</div><ul class="pf"><li>Up to 6 Pages</li><li>Custom Animations</li><li>Portfolio / Gallery</li><li>Full SEO Optimisation</li><li>Mobile-First Design</li><li>14-Day Delivery</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc rv d3"><div class="ptier">Premium</div><div class="pname">Custom Platform</div><div class="pamt"><span>$</span>799</div><div class="pper">starting price</div><ul class="pf"><li>Unlimited Pages</li><li>CMS Integration</li><li>E-commerce Ready</li><li>Advanced Animations</li><li>Performance Audit</li><li>3 Months Support</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get a Quote</a></div>
+  </div>
+</section>
+<div class="ctab rv"><h2>YOUR BRAND DESERVES<br>A WEBSITE THAT <em>IMPRESSES.</em></h2><a href="#" class="btn-d" onclick="goTo('contact');return false;">Start Web Project</a></div>
+<div class="mfoot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><a href="#" class="back-link" onclick="goTo('home');return false;">← Back to Home</a></div>
+</div></div>
+
+<!-- MARKETING PAGE -->
+<div class="page" id="pg-mkt"><div class="pw">
+<div class="sph" style="--hc:rgba(0,212,255,.05);"><div class="gbg"></div><div class="spey">Service — 04</div><h1 class="spt">DIGITAL<br><span class="hw">MARKETING</span></h1><p class="spsub">We grow audiences, build brands, and drive results through strategic digital marketing. SEO, social media, content strategy — everything you need to dominate your niche.</p></div>
+<section class="sec" style="background:var(--bg2);">
+  <div class="stag rv">Our Expertise</div><h2 class="stitle rv d1">GROWTH <span class="hw">STRATEGIES</span></h2>
+  <div class="fg3">
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div><div class="fcn">YouTube SEO</div><p class="fcd">Keyword research, title optimisation, description strategy, and tag structure to rank your videos higher in search.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg></div><div class="fcn">Social Media Growth</div><p class="fcd">Platform-specific content strategies for YouTube, Instagram, TikTok, and X to build a loyal engaged following.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div><div class="fcn">Analytics & Reporting</div><p class="fcd">Deep channel and campaign analytics with monthly reports showing what's working and what to improve.</p></div>
+    <div class="fc rv d1"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></div><div class="fcn">Content Strategy</div><p class="fcd">Video topic research, content calendars, and publishing schedules to maximise your algorithm performance.</p></div>
+    <div class="fc rv d2"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div class="fcn">Email Marketing</div><p class="fcd">Build and nurture your email list with targeted campaigns, newsletters, and automated funnels that convert.</p></div>
+    <div class="fc rv d3"><div class="fci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div class="fcn">Brand Partnerships</div><p class="fcd">We connect creators with relevant brand deals and manage sponsorship outreach on your behalf.</p></div>
+  </div>
+</section>
+<section class="sec" style="background:var(--bg);">
+  <div class="stag rv">Pricing</div><h2 class="stitle rv d1">MARKETING <span class="hw">PLANS</span></h2>
+  <div class="pg3">
+    <div class="pc rv d1"><div class="ptier">Starter</div><div class="pname">Growth Boost</div><div class="pamt"><span>$</span>99</div><div class="pper">per month</div><ul class="pf"><li>YouTube SEO Audit</li><li>5 Optimised Titles/Month</li><li>Basic Analytics Report</li><li>Social Media Captions (8/mo)</li><li>Email Support</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc feat rv d2"><div class="pbadge">Best Results</div><div class="ptier">Professional</div><div class="pname">Full Growth</div><div class="pamt"><span>$</span>249</div><div class="pper">per month</div><ul class="pf"><li>Full Channel SEO Strategy</li><li>Content Calendar (monthly)</li><li>Social Posts (20/mo)</li><li>Weekly Analytics Reports</li><li>Competitor Analysis</li><li>Monthly Strategy Call</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get Started</a></div>
+    <div class="pc rv d3"><div class="ptier">Agency</div><div class="pname">Full Management</div><div class="pamt"><span>$</span>499</div><div class="pper">per month</div><ul class="pf"><li>Everything in Professional</li><li>Paid Ads Management</li><li>Email Marketing Campaigns</li><li>Brand Partnership Outreach</li><li>Dedicated Account Manager</li><li>Weekly Check-in Calls</li></ul><a href="#" class="pcta" onclick="goTo('contact');return false;">Get a Quote</a></div>
+  </div>
+</section>
+<div class="ctab rv"><h2>READY TO <em>GROW</em><br>YOUR AUDIENCE?</h2><a href="#" class="btn-d" onclick="goTo('contact');return false;">Start Growing Today</a></div>
+<div class="mfoot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><a href="#" class="back-link" onclick="goTo('home');return false;">← Back to Home</a></div>
+</div></div>
+
+<!-- CONTACT PAGE -->
+<div class="page" id="pg-contact"><div class="pw">
+<div class="sph" style="--hc:rgba(232,255,0,.055);min-height:38vh;"><div class="gbg"></div><div class="spey">Let's Work Together</div><h1 class="spt">START YOUR <span class="hw">PROJECT</span></h1><p class="spsub">Tell us what you need and we'll get back to you within 24 hours with a custom plan tailored to your goals and budget.</p></div>
+<section class="sec" style="background:var(--bg2);">
+  <div class="cw">
+    <div class="cinfo rv">
+      <div class="stag">Get In Touch</div>
+      <h2 class="stitle" style="margin-bottom:20px;">WE'D LOVE TO<br><span class="hw">HEAR FROM YOU</span></h2>
+      <p>Whether you're a solo creator, a growing brand, or an established agency — we have a solution for you. Drop us a message and let's build something great together.</p>
+      <div class="cms">
+        <div class="cm"><div class="cmico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div><div><div class="cmlbl">Email</div><div class="cmval">hello@neothumbnails.com</div></div></div>
+        <div class="cm"><div class="cmico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><div><div class="cmlbl">WhatsApp / DM</div><div class="cmval">@NeoThumbnails</div></div></div>
+        <div class="cm"><div class="cmico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div><div class="cmlbl">Response Time</div><div class="cmval">Within 24 Hours</div></div></div>
+        <div class="cm"><div class="cmico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="cmlbl">Location</div><div class="cmval">India — Remote Worldwide</div></div></div>
+      </div>
+    </div>
+    <div class="cform rv d2">
+      <div class="crow"><div class="ig"><label>Your Name</label><input type="text" placeholder="John Creator"/></div><div class="ig"><label>Email</label><input type="email" placeholder="you@email.com"/></div></div>
+      <div class="crow"><div class="ig"><label>Country</label><input type="text" placeholder="India"/></div><div class="ig"><label>Age (optional)</label><input type="text" placeholder="21"/></div></div>
+      <div class="ig"><label>Service Needed</label><select><option value="">Select a Service</option><option>Thumbnail Design</option><option>Video Editing</option><option>Web Development</option><option>Digital Marketing</option><option>Full Package</option></select></div>
+      <div class="ig"><label>YouTube / Social Channel Link</label><input type="text" placeholder="youtube.com/yourchannel"/></div>
+      <div class="ig"><label>Budget Range</label><select><option value="">Select Budget</option><option>Under $50</option><option>$50 – $150</option><option>$150 – $500</option><option>$500+</option><option>Monthly Retainer</option></select></div>
+      <div class="ig"><label>Tell Us About Your Project</label><textarea placeholder="Describe your channel, goals, and what you're looking for..."></textarea></div>
+      <button class="csub" onclick="handleSub(this)">Send Message — Let's Go ↗</button>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="ft-top">
+    <div><div class="flogo">NEO<span>.</span></div><p class="ftag">If they will never click, they'll never watch it. We make them click.</p></div>
+    <div class="fcols">
+      <div><div class="fct">Services</div><ul class="fcl"><li><a href="#" onclick="goTo('thumb');return false;">Thumbnails</a></li><li><a href="#" onclick="goTo('video');return false;">Video Editing</a></li><li><a href="#" onclick="goTo('web');return false;">Web Dev</a></li><li><a href="#" onclick="goTo('mkt');return false;">Marketing</a></li></ul></div>
+      <div><div class="fct">Navigate</div><ul class="fcl"><li><a href="#" onclick="goTo('home');return false;">Home</a></li><li><a href="#" onclick="goTo('contact');return false;">Contact</a></li></ul></div>
+    </div>
+  </div>
+  <div class="ft-bot"><div class="fcopy">© 2025 <span>NEO Thumbnails</span>. All rights reserved.</div><div class="socs"><div class="soc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></div><div class="soc"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div></div></div>
+</footer>
+</div></div>
+
+<script>
+// CURSOR
+const cur=document.getElementById('cur'),crng=document.getElementById('crng');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function aC(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;crng.style.left=rx+'px';crng.style.top=ry+'px';requestAnimationFrame(aC);})();
+function bC(){cur.style.width='18px';cur.style.height='18px';crng.style.width='56px';crng.style.height='56px';}
+function nC(){cur.style.width='10px';cur.style.height='10px';crng.style.width='38px';crng.style.height='38px';}
+document.querySelectorAll('a,button,.sc,.pi,.logo,.flogo,.soc,.pcta,.price-cta').forEach(el=>{el.addEventListener('mouseenter',bC);el.addEventListener('mouseleave',nC);});
+
+// ROUTING
+function goTo(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  const t=document.getElementById('pg-'+p);
+  if(t){t.classList.add('active');window.scrollTo({top:0,behavior:'instant'});}
+  document.querySelectorAll('#nl a').forEach(a=>a.classList.toggle('act',a.dataset.p===p));
+  setTimeout(initRv,80);
+}
+function scrollSvc(){
+  const el=document.getElementById('svc-a');
+  if(el)el.scrollIntoView({behavior:'smooth'});
+}
+// NAV
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('solid',window.scrollY>50));
+// MOBILE
+function openM(){document.getElementById('mm').classList.add('open');}
+function closeM(){document.getElementById('mm').classList.remove('open');}
+// REVEAL
+function initRv(){
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.1});
+  document.querySelectorAll('.page.active .rv').forEach(el=>{el.classList.remove('vis');obs.observe(el);});
+}
+initRv();
+document.addEventListener('scroll',()=>{
+  document.querySelectorAll('.page.active .rv:not(.vis)').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.top<window.innerHeight*.9)el.classList.add('vis');
+  });
+},{passive:true});
+// FORM
+function handleSub(btn){
+  btn.textContent='✓ Sent! We\'ll reply within 24 hours.';
+  btn.style.background='#00d4ff';btn.style.clipPath='none';
+  setTimeout(()=>{btn.textContent='Send Message — Let\'s Go ↗';btn.style.background='var(--accent)';btn.style.clipPath='polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)';},4000);
+}
+</script>
+</body>
+</html>
